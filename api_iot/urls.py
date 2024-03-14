@@ -1,11 +1,10 @@
-from django.urls import path, include
-from .modelViews import DeviceView, DevicePostView
-from rest_framework. routers import DefaultRouter
+from django.urls import path
+from api_iot.deviceView import device_list, DeviceViewSet
 
-router = DefaultRouter()
-router.register("", DevicePostView)
+app_name = 'api_iot'
 
 urlpatterns = [
-    path('dispositivos/', DeviceView.as_view(), name='lista_dispositivos'),
-    path('dispositivos/post/', include(router.urls), name='device_create' ),
+    path('dispositivos/', device_list, name='device_list'),
+    path('dispositivos/create/', DeviceViewSet.as_view({'post': 'create'})),
+    path('dispositivos/<int:pk>/', DeviceViewSet.as_view({'delete': 'destroy'}), name='device-delete'),
 ]
