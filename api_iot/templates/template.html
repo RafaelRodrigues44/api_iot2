@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Dispositivo</title>
+    <style>
+        /* Estilos para o formulário */
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+ 
+        /* Estilos para os rótulos */
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+ 
+        /* Estilos para os campos de entrada */
+        input[type="checkbox"],
+        input[type="number"],
+        button[type="submit"] {
+            display: block;
+            width: calc(100% - 22px); 
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+ 
+        /* Estilos para o botão de envio */
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+ 
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Formulário de Dispositivo</h1>
+    <form id="device-form">
+        {% csrf_token %}
+        <label for="sensor">Sensor:</label>
+        <input type="checkbox" id="sensor" name="sensor">
+ 
+        <label for="button">Botão:</label>
+        <input type="checkbox" id="button" name="button">
+ 
+        <label for="robot_on">Ligar Robô:</label>
+        <input type="checkbox" id="robot_on" name="robot_on">
+ 
+        <label for="reset_counter">Resetar Contador:</label>
+        <input type="checkbox" id="reset_counter" name="reset_counter">
+ 
+        <label for="count_value">Valor da Contagem:</label>
+        <input type="number" id="count_value" name="count_value" value="0">
+ 
+        <button type="submit">Enviar</button>
+    </form>
+ 
+    <script>
+        document.getElementById('device-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+    
+            var sensor = document.getElementById("sensor").checked;
+            var button = document.getElementById("button").checked;
+            var robot_on = document.getElementById("robot_on").checked;
+            var reset_counter = document.getElementById("reset_counter").checked;
+            var count_value = parseInt(document.getElementById("count_value").value);
+    
+            var formData = {
+                'sensor': sensor,
+                'button': button,
+                'robot_on': robot_on,
+                'reset_counter': reset_counter,
+                'count_value': count_value
+            };
+    
+            // Obter o token CSRF
+            var csrftoken = getCookie('csrftoken');
+    
+            fetch('/dispositivos/post/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao enviar os dados');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Dados enviados com sucesso:', data);
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+        });
+    
+        // Função para obter o token CSRF
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Verificar se este é o cookie de CSRF
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>
+ 
