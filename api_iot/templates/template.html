@@ -3,33 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Dispositivos</title>
+    <title>Detalhes do último dispositivo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow-y: hidden;
+        }
+
+        .header {
+            margin-right: auto;
+            width: 900px;
+            overflow: hidden; 
+            height: auto;
+        }
+
+        .header img {
+            width: 300px;
+            height: 200px;
+            margin-left: 500px;
         }
 
         .container {
-            width: 30%;
+            width: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-sizing: border-box;
+            text-align: center;
         }
 
         .card {
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             padding: 20px;
         }
 
         .card h2 {
             color: #333;
             margin-top: 0;
-            margin-bottom: 10px;
+            margin-bottom: 2px;
         }
 
         .card ul {
@@ -70,15 +91,24 @@
         .card-buttons button:hover {
             background-color: #c82333;
         }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
+    <div class="header">
+        <img src="https://jeonline.com.br/images/noticias/6762/6762212211.jpg" alt="Logo SENAI">
+    </div>
+    
     <div class="container">
-        <!-- Lista de dispositivos em cards -->
-        <h1 style="text-align: center;">Lista de Dispositivos</h1>
-        {% for device in devices %}
+        <!-- Detalhes do último dispositivo -->
+        <h1>Detalhes do último dispositivo</h1>
         <div class="card">
-            <h2>Dispositivo ID: {{ device.id }}</h2>
+            <h2>ID do registro: {{ device.id }}</h2>
             <ul>
                 <li><span class="field-label">Sensor:</span> <span class="field-value">{{ device.Sensor }}</span></li>
                 <li><span class="field-label">Botão:</span> <span class="field-value">{{ device.Botao }}</span></li>
@@ -90,7 +120,11 @@
                 <button onclick="deleteDevice('{{ device.id }}')">Excluir</button>
             </div>
         </div>
-        {% endfor %}
+    </div>
+
+    <div class="footer">
+        <p>Rafael Rodrigues - Análise e Desenvolvimento de Sistemas - 3º Semestre</p>
+        <p>Senai Gaspar Ricardo Júnior - Sorocaba - 2024</p>
     </div>
 
     <script>

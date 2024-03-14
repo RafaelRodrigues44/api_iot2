@@ -3,9 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from api_iot.deviceModel import DeviceModel
 from api_iot.deviceSerializer import DeviceSerializer
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
 
 class DeviceViewSet(viewsets.ModelViewSet):
     queryset = DeviceModel.objects.all()
@@ -17,5 +16,5 @@ class DeviceViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 def device_list(request):
-    devices = DeviceModel.objects.all()
-    return render(request, 'template.html', {'devices': devices})
+    device = DeviceModel.objects.last()
+    return render(request, 'template.html', {'device': device})
